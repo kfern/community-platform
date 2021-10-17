@@ -17,10 +17,20 @@ import {
 } from './PageList'
 import { Link, Flex } from 'rebass'
 import DevSiteHeader from 'src/components/DevSiteHeader/DevSiteHeader'
+import SiteFooter from './common/SiteFooter/SiteFooter'
 
 interface IState {
   singlePageMode: boolean
   displayPageComponent?: any
+}
+
+function showOneArmyBanner(currentPageUrl, pages): boolean {
+  if (currentPageUrl === '/') {
+    return false
+  }
+
+  return !pages.find(pg => currentPageUrl.startsWith(pg.path))
+    ?.hideOneArmyBanner
 }
 
 export class Routes extends React.Component<any, IState> {
@@ -33,6 +43,7 @@ export class Routes extends React.Component<any, IState> {
       ...NO_HEADER_PAGES,
       ...POLICY_PAGES,
     ]
+
     // we are rendering different pages and navigation dependent on whether the user has navigated directly to view the
     // entire site, or just one page of it via subdomains. This is so we can effectively integrate just parts of this
     // platform into other sites. The first case is direct nav
@@ -95,6 +106,7 @@ export class Routes extends React.Component<any, IState> {
             </span>
           </Button>
         </Link>
+        {showOneArmyBanner(window.location.pathname, pages) && <SiteFooter />}
       </Flex>
     )
   }

@@ -79,6 +79,7 @@ const academy = {
     flex: 1,
   },
   fullPageWidth: true,
+  hideOneArmyBanner: true,
 }
 const events = {
   path: '/events',
@@ -98,6 +99,7 @@ const maps = {
     width: '100vw',
   },
   fullPageWidth: true,
+  hideOneArmyBanner: true,
 }
 const admin = {
   path: '/admin',
