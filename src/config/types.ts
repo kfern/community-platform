@@ -13,6 +13,7 @@ export interface IFirebaseConfig {
 
 export interface ISentryConfig {
   dsn: string
+  environment: string
 }
 
 export interface IAlgoliaConfig {
