@@ -1,13 +1,13 @@
 import { Component } from 'react'
-import { COMMUNITY_PAGES } from 'src/pages/PageList'
+import { getAvailablePageList, IPageMeta } from 'src/pages/PageList'
 import theme from 'src/themes/styled.theme'
 import styled from 'styled-components'
 import { Box } from 'rebass'
 import Profile from 'src/pages/common/Header/Menu/Profile/Profile'
 import MenuMobileLink from 'src/pages/common/Header/Menu/MenuMobile/MenuMobileLink'
 import MenuMobileExternalLink from './MenuMobileExternalLink'
-import { BAZAR_URL, GLOBAL_SITE_URL } from 'src/utils/urls'
 import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
+import { getExternalLinks } from 'src/utils/navigation'
 
 const PanelContainer = styled(Box)`
   width: 100%;
@@ -43,12 +43,23 @@ export const MenuMobileLinkContainer = styled(Box as any)`
 `
 
 export class MenuMobilePanel extends Component {
+  state = {
+    menuItems: [],
+    externalLinks: [],
+  }
+
+  async componentDidMount() {
+    const menuItems = await getAvailablePageList()
+    const externalLinks = await getExternalLinks()
+    this.setState({ menuItems, externalLinks: externalLinks })
+  }
+
   render() {
     return (
       <>
         <PanelContainer>
           <PanelMenu>
-            {COMMUNITY_PAGES.map(page => {
+            {(this.state.menuItems || []).map((page: IPageMeta) => {
               const link = (
                 <MenuMobileLink
                   path={page.path}
@@ -65,13 +76,17 @@ export class MenuMobilePanel extends Component {
               )
             })}
             <Profile isMobile={true} />
-            {/* <MenuMobileLinkContainer>
-              <MenuMobileExternalLink content={'Bazar'} href={BAZAR_URL} />
-              <MenuMobileExternalLink
-                content={'Global Site'}
-                href={GLOBAL_SITE_URL}
-              />
-            </MenuMobileLinkContainer> */}
+            {this.state.externalLinks.length >= 1 && (
+              <MenuMobileLinkContainer>
+                {this.state.externalLinks.map(({ link, title }, idx) => (
+                  <MenuMobileExternalLink
+                    key={idx}
+                    content={title}
+                    href={link}
+                  />
+                ))}
+              </MenuMobileLinkContainer>
+            )}
           </PanelMenu>
         </PanelContainer>
       </>
