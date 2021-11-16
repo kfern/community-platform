@@ -30,13 +30,10 @@ export class AuthWrapper extends React.Component<IProps, IState> {
     }
 
     const { roleRequired } = this.props
-    let userRoles = user?.userRoles || []
+    const userRoles = user?.userRoles || []
     // if running dev or preview site allow user-overridden permissions (ignoring db user role)
-    if (SITE === 'dev_site' || SITE === 'preview') {
+    if (['dev_site', 'preview'].includes(SITE)) {
       // default ignore existing user roles
-      if (user) {
-        userRoles = []
-      }
       if (DEV_SITE_ROLE) {
         return DEV_SITE_ROLE === roleRequired
       }
