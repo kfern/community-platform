@@ -1,6 +1,7 @@
 import { Suspense, lazy } from 'react'
 import { AuthRoute } from '../common/AuthRoute'
 import { Route, Switch, withRouter } from 'react-router-dom'
+
 const CreateResearch = lazy(() => import('./Content/CreateResearch'))
 const CreateUpdate = lazy(() => import('./Content/CreateUpdate'))
 const ResearchItemEditor = lazy(() => import('./Content/EditResearch'))
@@ -17,7 +18,6 @@ const routes = () => (
         component={CreateResearch}
         roleRequired="beta-tester"
       />
-      <Route path="/research/:slug" component={ResearchItemDetail} />
       <AuthRoute
         exact
         path="/research/:slug/new-update"
@@ -36,6 +36,8 @@ const routes = () => (
         component={UpdateItemEditor}
         roleRequired="beta-tester"
       />
+
+      <Route path="/research/:slug" component={ResearchItemDetail} />
     </Switch>
   </Suspense>
 )
