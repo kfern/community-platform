@@ -9,7 +9,8 @@ Requirements
   * Authentication
 * Firebase CLI tools locally
 * [Create an application](https://console.cloud.google.com/appengine/start/create)
-* Your project must be on the Blaze pay as you go pricing plan
+  * Your project must be on the Blaze pay as you go pricing plan
+  * [Configure `cors.json` on the storage bucket](https://cloud.google.com/storage/docs/configuring-cors) to support your deployed origin. See: functions/src/config/cors.md
 
 
 Deploying:
