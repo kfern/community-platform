@@ -29,12 +29,6 @@
     "install:clean": "yarn workspace oa-scripts install:clean",
     "postinstall": "husky install"
   },
-  "lint-staged": {
-    "*.{js,ts,tsx}": [
-      "eslint --fix",
-      "git add"
-    ]
-  },
   "browserslist": {
     "production": [
       ">0.2%",
