@@ -1,15 +1,15 @@
 import { format } from 'date-fns'
 import * as React from 'react'
-import { Box, Flex, Image } from 'rebass'
+import { Box, Flex, Image } from 'rebass/styled-components'
 import ArrowIcon from 'src/assets/icons/icon-arrow-select.svg'
-import { Button } from 'src/components/Button'
+import { Button } from 'oa-components'
 import Heading from 'src/components/Heading'
 import { Link } from 'src/components/Links'
 import ModerationStatusText from 'src/components/ModerationStatusText'
 import Text from 'src/components/Text'
 import { IResearch } from 'src/models/research.models'
 import theme from 'src/themes/styled.theme'
-
+import { VerifiedUserBadge } from 'src/components/VerifiedUserBadge/VerifiedUserBadge'
 interface IProps {
   research: IResearch.ItemDB
   isEditable: boolean
@@ -95,17 +95,27 @@ const ResearchDescription: React.FC<IProps> = ({
         <Box mt={3} mb={2}>
           <Flex alignItems="center">
             <Text inline auxiliary my={2} ml={1}>
-              By{' '}
-              <Link
-                sx={{
-                  textDecoration: 'underline',
-                  color: 'inherit',
-                }}
-                to={'/u/' + research._createdBy}
-              >
-                {research._createdBy}
-              </Link>{' '}
-              | Started on {format(new Date(research._created), 'DD-MM-YYYY')}
+              <Flex alignItems="center">
+                By
+                <Link
+                  ml={1}
+                  mr={1}
+                  sx={{
+                    textDecoration: 'underline',
+                    color: 'inherit',
+                  }}
+                  to={'/u/' + research._createdBy}
+                >
+                  {research._createdBy}
+                </Link>
+                <VerifiedUserBadge
+                  userId={research._createdBy}
+                  mr={1}
+                  width="12px"
+                  height="12px"
+                />
+                | Started on {format(new Date(research._created), 'DD-MM-YYYY')}
+              </Flex>
             </Text>
           </Flex>
           <Text

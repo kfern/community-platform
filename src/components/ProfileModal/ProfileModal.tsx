@@ -1,12 +1,13 @@
 import * as React from 'react'
-import { Box } from 'rebass'
+import { Box } from 'rebass/styled-components'
 import styled from 'styled-components'
 import { UserStore } from 'src/stores/User/user.store'
 import { inject, observer } from 'mobx-react'
 import { COMMUNITY_PAGES_PROFILE } from 'src/pages/PageList'
 import { NavLink } from 'react-router-dom'
 import Flex from 'src/components/Flex'
-import theme, { zIndex } from 'src/themes/styled.theme'
+import theme from 'src/themes/styled.theme'
+import { AuthWrapper } from '../Auth/AuthWrapper'
 
 interface IProps {
   username: string
@@ -24,11 +25,11 @@ const ModalContainer = styled(Box)`
   position: absolute;
   right: 10px;
   top: 60px;
-  z-index: ${zIndex.modalProfile};
+  z-index: ${theme.zIndex.modalProfile};
   height: 100%;
 `
 const ModalContainerInner = styled(Box)`
-  z-index: ${zIndex.modalProfile};
+  z-index: ${theme.zIndex.modalProfile};
   position: relative;
   background: white;
   border: 2px solid black;
@@ -38,7 +39,7 @@ const ModalContainerInner = styled(Box)`
 const ModalLink = styled(NavLink).attrs(() => ({
   activeClassName: 'current',
 }))`
-  z-index: ${zIndex.modalProfile};
+  z-index: ${theme.zIndex.modalProfile};
   display: flex;
   flex-direction: column;
   color: ${theme.colors.black};
@@ -87,17 +88,15 @@ export class ProfileModal extends React.Component<IProps> {
               <Flex>Profile</Flex>
             </ModalLink>
           </Flex>
-          <Flex>
-            {COMMUNITY_PAGES_PROFILE.map(page => (
-              <ModalLink
-                key={page.path}
-                to={page.path}
-                data-cy={`menu-${page.title}`}
-              >
-                <Flex>{page.title}</Flex>
-              </ModalLink>
-            ))}
-          </Flex>
+          {COMMUNITY_PAGES_PROFILE.map(page => (
+            <AuthWrapper roleRequired={page.requiredRole} key={page.path}>
+              <Flex>
+                <ModalLink to={page.path} data-cy={`menu-${page.title}`}>
+                  <Flex>{page.title}</Flex>
+                </ModalLink>
+              </Flex>
+            </AuthWrapper>
+          ))}
           <Flex>
             <ModalLink
               onClick={() => this.logout()}

@@ -2,10 +2,10 @@ import React from 'react'
 import Flex from 'src/components/Flex'
 import Heading from 'src/components/Heading'
 import theme from 'src/themes/styled.theme'
-import { Button } from 'src/components/Button'
+import { Button } from 'oa-components'
 import Text from 'src/components/Text'
 import { Link } from 'src/components/Links'
-import { Link as ExternalLink } from 'rebass'
+import { Link as ExternalLink } from 'rebass/styled-components'
 
 class SignUpMessagePage extends React.Component {
   public render() {

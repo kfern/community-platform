@@ -7,6 +7,7 @@ import { ModerationStatusText } from 'src/components/ModerationStatusText'
 import Text from 'src/components/Text'
 import { IResearch } from 'src/models/research.models'
 import theme from 'src/themes/styled.theme'
+import { VerifiedUserBadge } from '../VerifiedUserBadge/VerifiedUserBadge'
 
 interface IProps {
   item: IResearch.ItemDB
@@ -44,6 +45,12 @@ const ResearchListItem: React.FC<IProps> = ({ item }) => (
           >
             {item._createdBy}
           </Text>
+          <VerifiedUserBadge
+            userId={item._createdBy}
+            ml={1}
+            height="12px"
+            width="12px"
+          />
         </Flex>
         <Flex
           alignItems="center"

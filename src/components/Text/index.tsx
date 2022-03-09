@@ -1,8 +1,9 @@
+import { forwardRef } from 'react'
 import {
   Text as RebassText,
   TextProps as RebassTextProps,
 } from 'rebass/styled-components'
-import theme from 'src/themes/styled.theme'
+import theme from '../../themes/styled.theme'
 import styled from 'styled-components'
 
 export interface ITextProps {
@@ -29,6 +30,7 @@ export interface ITextProps {
   critical?: boolean
   dashed?: boolean
   cropBottomRight?: boolean
+  theme?: any
 }
 
 export const uppercase = props =>
@@ -143,8 +145,11 @@ export const BaseText = styled(RebassText as any)`
 type TextProps = ITextProps & RebassTextProps
 
 // TODO - incorporate custom css into rebass props to allow things like below to be passed
-export const Text = (props: TextProps) => (
-  <BaseText {...(props as any)}>{props.children}</BaseText>
-)
-
+export const Text = forwardRef((props: TextProps, ref) => (
+  <BaseText ref={ref} {...(props as any)}>
+    {props.children}
+  </BaseText>
+))
+// Fix lint issue https://stackoverflow.com/questions/67992894/component-definition-is-missing-display-name-for-forwardref
+Text.displayName = 'Text'
 export default Text

@@ -8,13 +8,12 @@ import { MapsStore } from './Maps/maps.store'
 import { DatabaseV2 } from './databaseV2'
 import { MobileMenuStore } from './MobileMenu/mobilemenu.store'
 import { AdminStore } from './Admin/admin.store'
+import { ThemeStore } from './Theme/theme.store'
+import { AggregationsStore } from './Aggregations/aggregations.store'
 
 export class RootStore {
   dbV2 = new DatabaseV2()
-  stores: IStores
-  constructor() {
-    this.stores = stores(this)
-  }
+  stores = stores(this)
 }
 
 // the following stores are passed into a top level app provider and can be accessed through @inject
@@ -25,7 +24,8 @@ export class RootStore {
 // as these will be called immediately, and instead use init() or similar methods that can be called
 // from a page (see common/module store for example)
 const stores = (rootStore: RootStore) => {
-  return {
+  const stores: IStores = {
+    aggregationsStore: new AggregationsStore(rootStore),
     howtoStore: new HowtoStore(rootStore),
     userStore: new UserStore(rootStore),
     templateStore: new TemplateStore(rootStore),
@@ -35,7 +35,9 @@ const stores = (rootStore: RootStore) => {
     eventStore: new EventStore(rootStore),
     mapsStore: new MapsStore(rootStore),
     adminStore: new AdminStore(rootStore),
+    themeStore: new ThemeStore(),
   }
+  return stores
 }
 
 export interface IStores {
@@ -48,4 +50,6 @@ export interface IStores {
   eventStore: EventStore
   mapsStore: MapsStore
   adminStore: AdminStore
+  themeStore: ThemeStore
+  aggregationsStore: AggregationsStore
 }

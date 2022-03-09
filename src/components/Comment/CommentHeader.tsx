@@ -1,8 +1,9 @@
-import { Box, Flex, Text } from 'rebass'
+import { Box, Flex, Text } from 'rebass/styled-components'
 import { FlagIconHowTos } from 'src/components/Icons/FlagIcon/FlagIcon'
 import { IComment } from 'src/models'
 import { Link } from 'src/components/Links'
 import theme from 'src/themes/styled.theme'
+import { VerifiedUserBadge } from '../VerifiedUserBadge/VerifiedUserBadge'
 
 interface IProps extends Omit<IComment, 'text' | '_id' | '_creatorId'> {}
 
@@ -26,6 +27,12 @@ export const CommentHeader = ({
           >
             {creatorName}
           </Link>
+          <VerifiedUserBadge
+            userId={creatorName}
+            ml={1}
+            height="12px"
+            width="12px"
+          />
         </span>
       </Box>
       <Flex alignItems="center">

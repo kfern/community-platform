@@ -1,9 +1,9 @@
 import * as React from 'react'
 import L from 'leaflet'
-import { Image } from 'rebass'
+import { Image } from 'rebass/styled-components'
 import Flex from 'src/components/Flex'
 import Text from 'src/components/Text'
-import { Button } from 'src/components/Button'
+import { Button } from 'oa-components'
 import { Popup as LeafletPopup, Map } from 'react-leaflet'
 import styled from 'styled-components'
 import { distanceInWords } from 'date-fns'
@@ -189,17 +189,19 @@ export class Popup extends React.Component<IProps> {
       : this.renderLoading()
 
     return (
-      <LeafletPopup
-        ref={this.leafletRef}
-        position={[activePin.location.lat, activePin.location.lng]}
-        offset={new L.Point(2, -10)}
-        closeButton={false}
-        className={activePin !== undefined ? '' : 'closed'}
-        minWidth={230}
-        maxWidth={230}
-      >
-        {content}
-      </LeafletPopup>
+      activePin.location && (
+        <LeafletPopup
+          ref={this.leafletRef}
+          position={[activePin.location.lat, activePin.location.lng]}
+          offset={new L.Point(2, -10)}
+          closeButton={false}
+          className={activePin !== undefined ? '' : 'closed'}
+          minWidth={230}
+          maxWidth={230}
+        >
+          {content}
+        </LeafletPopup>
+      )
     )
   }
 }

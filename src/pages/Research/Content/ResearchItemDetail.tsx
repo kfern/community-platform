@@ -1,8 +1,8 @@
 import { observer } from 'mobx-react'
 import * as React from 'react'
 import { RouteComponentProps } from 'react-router'
-import { Box, Flex } from 'rebass'
-import { Button } from 'src/components/Button'
+import { Box, Flex } from 'rebass/styled-components'
+import { Button } from 'oa-components'
 import { Link } from 'src/components/Links'
 import { Loader } from 'src/components/Loader'
 import { NotFoundPage } from 'src/pages/NotFound/NotFound'
@@ -27,7 +27,7 @@ const ResearchItemDetail = observer((props: IProps) => {
   }
 
   React.useEffect(() => {
-    (async () => {
+    ;(async () => {
       const { slug } = props.match.params
       await store.setActiveResearchItem(slug)
       setIsLoading(false)
@@ -54,17 +54,18 @@ const ResearchItemDetail = observer((props: IProps) => {
           moderateResearch={moderateResearch}
         />
         <Box my={16}>
-          {item.updates.map((update, index) => {
-            return (
-              <Update
-                update={update}
-                key={update._id}
-                updateIndex={index}
-                isEditable={isEditable}
-                slug={item.slug}
-              />
-            )
-          })}
+          {item &&
+            item?.updates?.map((update, index) => {
+              return (
+                <Update
+                  update={update}
+                  key={update._id}
+                  updateIndex={index}
+                  isEditable={isEditable}
+                  slug={item.slug}
+                />
+              )
+            })}
         </Box>
         {isEditable && (
           <Flex my={4}>

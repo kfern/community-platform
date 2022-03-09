@@ -7,7 +7,7 @@ import Step from './Step/Step'
 import { IHowtoDB } from 'src/models/howto.models'
 import Text from 'src/components/Text'
 import { Box, Flex } from 'rebass/styled-components'
-import { Button } from 'src/components/Button'
+import { Button } from 'oa-components'
 import styled from 'styled-components'
 import theme from 'src/themes/styled.theme'
 import WhiteBubble0 from 'src/assets/images/white-bubble_0.svg'
@@ -15,10 +15,10 @@ import WhiteBubble1 from 'src/assets/images/white-bubble_1.svg'
 import WhiteBubble2 from 'src/assets/images/white-bubble_2.svg'
 import WhiteBubble3 from 'src/assets/images/white-bubble_3.svg'
 import { Link } from 'src/components/Links'
-import { zIndex } from 'src/themes/styled.theme'
 import { Loader } from 'src/components/Loader'
 import { UserStore } from 'src/stores/User/user.store'
 import { HowToComments } from './HowToComments/HowToComments'
+import { AggregationsStore } from 'src/stores/Aggregations/aggregations.store'
 // The parent container injects router props along with a custom slug parameter (RouteComponentProps<IRouterCustomParams>).
 // We also have injected the doc store to access its methods to get doc by slug.
 // We can't directly provide the store as a prop though, and later user a get method to define it
@@ -28,6 +28,7 @@ interface IRouterCustomParams {
 interface InjectedProps extends RouteComponentProps<IRouterCustomParams> {
   howtoStore: HowtoStore
   userStore: UserStore
+  aggregationsStore: AggregationsStore
 }
 interface IState {
   howto?: IHowtoDB
@@ -41,7 +42,7 @@ const MoreBox = styled(Box)`
     background-image: url(${WhiteBubble0});
     width: 100%;
     height: 100%;
-    z-index: ${zIndex.behind};
+    z-index: ${theme.zIndex.behind};
     background-size: contain;
     background-repeat: no-repeat;
     position: absolute;
@@ -71,7 +72,7 @@ const MoreBox = styled(Box)`
   }
 `
 
-@inject('howtoStore', 'userStore')
+@inject('howtoStore', 'userStore', 'aggregationsStore')
 @observer
 export class Howto extends React.Component<
   RouteComponentProps<IRouterCustomParams>,
@@ -101,9 +102,17 @@ export class Howto extends React.Component<
     }
   }
 
-  private onUsefulClick = async (howtoId: string) => {
+  private onUsefulClick = async (
+    howtoId: string,
+    howtoCreatedBy: string,
+    howToSlug: string,
+  ) => {
     // Fire & forget
-    await this.injected.userStore.updateUsefulHowTos(howtoId)
+    await this.injected.userStore.updateUsefulHowTos(
+      howtoId,
+      howtoCreatedBy,
+      howToSlug,
+    )
   }
 
   public async componentDidMount() {
@@ -120,16 +129,24 @@ export class Howto extends React.Component<
     const { activeHowto } = this.store
 
     if (activeHowto) {
+      const votedUsefulCount = this.injected.aggregationsStore.aggregations
+        .users_votedUsefulHowtos[activeHowto._id]
       return (
         <>
           <HowtoDescription
             howto={activeHowto}
-            votedUsefulCount={this.store.howtoStats?.votedUsefulCount}
+            votedUsefulCount={votedUsefulCount}
             loggedInUser={loggedInUser}
             needsModeration={this.store.needsModeration(activeHowto)}
             userVotedUseful={this.store.userVotedActiveHowToUseful}
             moderateHowto={this.moderateHowto}
-            onUsefulClick={() => this.onUsefulClick(activeHowto._id)}
+            onUsefulClick={() =>
+              this.onUsefulClick(
+                activeHowto._id,
+                activeHowto._createdBy,
+                activeHowto.slug,
+              )
+            }
           />
           <Box mt={9}>
             {activeHowto.steps.map((step: any, index: number) => (

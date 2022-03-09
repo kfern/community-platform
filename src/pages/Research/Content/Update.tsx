@@ -1,9 +1,9 @@
 import { format } from 'date-fns'
-import * as React from 'react';
+import * as React from 'react'
 import Linkify from 'react-linkify'
 import ReactPlayer from 'react-player'
-import { Box } from 'rebass'
-import { Button } from 'src/components/Button'
+import { Box } from 'rebass/styled-components'
+import { Button } from 'oa-components'
 import Flex from 'src/components/Flex'
 import Heading from 'src/components/Heading'
 import ImageGallery from 'src/components/ImageGallery'
@@ -11,7 +11,9 @@ import { Link } from 'src/components/Links'
 import Text from 'src/components/Text'
 import { IResearch } from 'src/models/research.models'
 import { IUploadedFileMeta } from 'src/stores/storage'
+import { ResearchComments } from './ResearchComments/ResearchComments'
 import styled from 'styled-components'
+import { AuthWrapper } from 'src/components/Auth/AuthWrapper'
 
 interface IProps {
   update: IResearch.UpdateDB
@@ -121,6 +123,9 @@ const Update: React.FC<IProps> = ({
               <ImageGallery images={update.images as IUploadedFileMeta[]} />
             )}
           </Box>
+          <AuthWrapper roleRequired="beta-tester">
+            <ResearchComments update={update} comments={update.comments} />
+          </AuthWrapper>
         </Flex>
       </Flex>
     </>

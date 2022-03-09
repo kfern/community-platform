@@ -7,10 +7,13 @@ import { FlagIconHowTos } from 'src/components/Icons/FlagIcon/FlagIcon'
 import TagDisplay from 'src/components/Tags/TagDisplay/TagDisplay'
 import { IHowtoDB } from 'src/models/howto.models'
 import Heading from 'src/components/Heading'
+import Icon from 'src/components/Icons'
 import { capitalizeFirstLetter } from 'src/utils/helpers'
+import { VerifiedUserBadge } from 'src/components/VerifiedUserBadge/VerifiedUserBadge'
 
 interface IProps {
   howto: IHowtoDB
+  votedUsefulCount: number
 }
 export const HowToCard = (props: IProps) => (
   <Flex
@@ -56,15 +59,29 @@ export const HowToCard = (props: IProps) => (
           {props.howto.creatorCountry && (
             <FlagIconHowTos code={props.howto.creatorCountry} />
           )}
-          <Text auxiliary my={2} ml={1}>
+          <Text auxiliary my={2} ml={1} display="flex">
             By {props.howto._createdBy}
           </Text>
+          <VerifiedUserBadge
+            userId={props.howto._createdBy}
+            ml={1}
+            height="12px"
+            width="12px"
+          />
         </Flex>
         <Flex mt={4}>
-          {props.howto.tags &&
-            Object.keys(props.howto.tags).map(tag => {
-              return <TagDisplay key={tag} tagKey={tag} />
-            })}
+          <Flex flex={1} flexWrap={'wrap'}>
+            {props.howto.tags &&
+              Object.keys(props.howto.tags).map(tag => {
+                return <TagDisplay key={tag} tagKey={tag} />
+              })}
+          </Flex>
+          {props.votedUsefulCount > 0 && (
+            <Flex ml={1} alignItems="center">
+              <Icon glyph="star-active" marginRight="4px" />
+              <Text color="black">{props.votedUsefulCount}</Text>
+            </Flex>
+          )}
         </Flex>
       </Flex>
     </Link>

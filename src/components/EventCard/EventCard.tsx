@@ -1,12 +1,13 @@
 import Flex from 'src/components/Flex'
 import ModerationStatusText from 'src/components/ModerationStatusText'
 import Text from 'src/components/Text'
-import { Button } from 'src/components/Button'
+import { Button } from 'oa-components'
 import TagDisplay from 'src/components/Tags/TagDisplay/TagDisplay'
 import FlagIconEvents from 'src/components/Icons/FlagIcon/FlagIcon'
 import { IEvent } from '../../models/events.models'
 import { getMonth, getDay, capitalizeFirstLetter } from 'src/utils/helpers'
 import { LinkTargetBlank } from '../Links/LinkTargetBlank/LinkTargetBlank'
+import { VerifiedUserBadge } from '../VerifiedUserBadge/VerifiedUserBadge'
 
 interface IProps {
   event: IEvent
@@ -79,9 +80,16 @@ export const EventCard = (props: IProps) => (
           {capitalizeFirstLetter(props.event.title)}
         </Text>
       </Flex>
-      <Text auxiliary width={1}>
-        By {props.event._createdBy}
-      </Text>
+      <Flex>
+        <Text auxiliary width={1}>
+          By {props.event._createdBy}
+        </Text>
+        <VerifiedUserBadge
+          userId={props.event._createdBy}
+          width="16px"
+          height="16px"
+        />
+      </Flex>
     </Flex>
     <Flex
       flexWrap={'nowrap'}
@@ -92,10 +100,12 @@ export const EventCard = (props: IProps) => (
     >
       <FlagIconEvents code={props.event.location.countryCode} />
       <Text auxiliary width={1} ml={[1, 1, 2]}>
-        {props.event.location.name},{' '}
-        <Text inline auxiliary uppercase>
-          {props.event.location.countryCode}
-        </Text>
+        {[
+          props.event.location.administrative,
+          props.event.location?.countryCode?.toUpperCase(),
+        ]
+          .filter(Boolean)
+          .join(', ')}
       </Text>
     </Flex>
     <Flex

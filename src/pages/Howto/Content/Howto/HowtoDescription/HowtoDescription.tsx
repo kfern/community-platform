@@ -6,12 +6,12 @@ import Heading from 'src/components/Heading'
 import Text from 'src/components/Text'
 import ModerationStatusText from 'src/components/ModerationStatusText'
 import { Link } from 'src/components/Links'
-import { Box, Flex, Image } from 'rebass'
+import { Box, Flex, Image } from 'rebass/styled-components'
 import { FileInfo } from 'src/components/FileInfo/FileInfo'
 import StepsIcon from 'src/assets/icons/icon-steps.svg'
 import TimeNeeded from 'src/assets/icons/icon-time-needed.svg'
 import DifficultyLevel from 'src/assets/icons/icon-difficulty-level.svg'
-import { Button } from 'src/components/Button'
+import { Button } from 'oa-components'
 import { IUser } from 'src/models/user.models'
 import {
   isAllowToEditContent,
@@ -22,12 +22,14 @@ import theme from 'src/themes/styled.theme'
 import ArrowIcon from 'src/assets/icons/icon-arrow-select.svg'
 import { FlagIconHowTos } from 'src/components/Icons/FlagIcon/FlagIcon'
 import { HowtoUsefulStats } from './HowtoUsefulStats'
+import { VerifiedUserBadge } from 'src/components/VerifiedUserBadge/VerifiedUserBadge'
 
 interface IProps {
   howto: IHowtoDB
   loggedInUser: IUser | undefined
   needsModeration: boolean
   votedUsefulCount?: number
+  verified?: boolean
   userVotedUseful: boolean
   moderateHowto: (accepted: boolean) => void
   onUsefulClick: () => void
@@ -92,14 +94,12 @@ export default class HowtoDescription extends PureComponent<IProps> {
               </Button>
             </Link>
             <Box style={{ flexGrow: 1 }}>
-              {this.props.votedUsefulCount !== undefined && (
-                <HowtoUsefulStats
-                  votedUsefulCount={this.props.votedUsefulCount}
-                  userVotedUseful={this.props.userVotedUseful}
-                  isLoggedIn={this.props.loggedInUser ? true : false}
-                  onUsefulClick={this.props.onUsefulClick}
-                />
-              )}
+              <HowtoUsefulStats
+                votedUsefulCount={this.props.votedUsefulCount || 0}
+                userVotedUseful={this.props.userVotedUseful}
+                isLoggedIn={this.props.loggedInUser ? true : false}
+                onUsefulClick={this.props.onUsefulClick}
+              />
             </Box>
             {/* Check if pin should be moderated */}
             {this.props.needsModeration && (
@@ -144,6 +144,11 @@ export default class HowtoDescription extends PureComponent<IProps> {
                 >
                   {howto._createdBy}
                 </Link>{' '}
+                <VerifiedUserBadge
+                  userId={howto._createdBy}
+                  height="12px"
+                  width="12px"
+                />
                 | Published on {this.dateCreatedByText(howto)}
               </Text>
             </Flex>

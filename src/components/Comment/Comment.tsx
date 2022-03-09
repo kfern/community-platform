@@ -1,27 +1,54 @@
-import React, { useState } from 'react'
+import React, { createRef, useEffect, useState } from 'react'
 import { FaTrash, FaRegEdit } from 'react-icons/fa'
-import { Flex } from 'rebass'
-import { useCommonStores } from 'src'
+import { Flex } from 'rebass/styled-components'
 import { IComment } from 'src/models'
 import { CommentHeader } from './CommentHeader'
 import { Text } from 'src/components/Text'
 import { Modal } from '../Modal/Modal'
 import { TextAreaField } from '../Form/Fields'
 import { Field, Form } from 'react-final-form'
-import { Button } from 'src/components/Button'
+import { Button } from 'oa-components'
 import { AuthWrapper } from '../Auth/AuthWrapper'
 import { logger } from 'src/logger'
 
-export interface IProps extends IComment {}
+export interface IProps extends IComment {
+  handleEditRequest
+  handleDelete
+  handleEdit
+}
 
 export const Comment: React.FC<IProps> = ({
   _creatorId,
   text,
   _id,
+  handleEditRequest,
+  handleDelete,
+  handleEdit,
   ...props
 }) => {
-  const { stores } = useCommonStores()
+  const textRef = createRef<any>();
   const [showEditModal, setShowEditModal] = useState(false)
+  const [textHeight, setTextHeight] = useState(0)
+  const [isShowMore, setShowMore] = useState(false)
+
+  const onEditRequest = () => {
+    handleEditRequest()
+    return setShowEditModal(true)
+  }
+
+  const onDelete = () => {
+    handleDelete(_id)
+  }
+
+  useEffect(() => {
+    if (textRef.current) {
+      setTextHeight(textRef.current.scrollHeight)
+    }
+  }, [])
+
+  const showMore = () => {
+    setShowMore(!isShowMore);
+  }
 
   return (
     <Flex
@@ -33,10 +60,31 @@ export const Comment: React.FC<IProps> = ({
       style={{ borderRadius: '5px' }}
     >
       <CommentHeader {...props} />
-      <Text my={2} style={{ whiteSpace: 'pre-wrap' }}>
+      <Text
+        my={2} 
+        style={{ 
+          whiteSpace: 'pre-wrap',
+          wordBreak: 'break-word',
+          overflow: "hidden",
+          lineHeight: "1em",
+          maxHeight: isShowMore ? "max-content" : "10em",
+        }}
+        ref={textRef}
+      >
         {text}
       </Text>
-
+      {textHeight > 160 &&
+          <a 
+            onClick={showMore}
+            style={{
+              color: "gray",
+              cursor: "pointer",
+              fontSize: "14px",
+            }}
+          >
+            {isShowMore ? 'Show less' : 'Show more'}
+          </a>
+      }
       <Flex ml="auto">
         <AuthWrapper roleRequired="admin" additionalAdmins={[_creatorId]}>
           <Text
@@ -45,7 +93,7 @@ export const Comment: React.FC<IProps> = ({
             }}
             mr={2}
             fontSize="12px"
-            onClick={async () => setShowEditModal(true)}
+            onClick={onEditRequest}
           >
             edit <FaRegEdit />
           </Text>
@@ -55,14 +103,7 @@ export const Comment: React.FC<IProps> = ({
               alignItems: 'center',
             }}
             fontSize="12px"
-            onClick={async () => {
-              const confirmation = window.confirm(
-                'Are you sure you want to delete this comment?',
-              )
-              if (confirmation) {
-                await stores.howtoStore.deleteComment(_id)
-              }
-            }}
+            onClick={onDelete}
           >
             delete <FaTrash color="red" />
           </Text>
@@ -105,8 +146,8 @@ export const Comment: React.FC<IProps> = ({
                   </Button>
                   <Button
                     small
-                    onClick={async () => {
-                      await stores.howtoStore.editComment(_id, values.comment)
+                    onClick={() => {
+                      handleEdit(_id, values.comment)
                       setShowEditModal(false)
                     }}
                   >

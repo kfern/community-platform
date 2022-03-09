@@ -18,9 +18,11 @@ export type IMapPinSubtype = WorkspaceType
  */
 export interface IMapPin extends IModerable {
   _id: string
+  _deleted: boolean
   type: IMapPinType
   location: ILatLng
   subType?: IMapPinSubtype
+  verified: boolean
 }
 
 /**

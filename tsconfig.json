@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "baseUrl": ".",
     "skipLibCheck": true,
@@ -17,12 +21,21 @@
     "noImplicitAny": false,
     "strictPropertyInitialization": false,
     "experimentalDecorators": true,
-    "typeRoots": ["./node_modules/@types", "./types"],
+    "typeRoots": [
+      "./node_modules/@types",
+      "./types",
+      "@testing-library/jest-dom",
+      "../src/themes/types"
+    ],
     "declaration": true,
     "noEmit": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "useUnknownInCatchVariables": false
   },
-  "include": ["src/**/*", "types"],
+  "include": [
+    "src/**/*",
+    "types"
+  ],
   "exclude": [
     "node_modules",
     "build",
@@ -35,6 +48,12 @@
     "functions",
     "src/utils/UserMigration",
     "src/setupProxy.js",
-    "src/assets/userReportInit.js"
+    "src/assets/userReportInit.js",
+    "packages/components"
+  ],
+  "references": [
+    {
+      "path": "./packages/components"
+    }
   ]
 }

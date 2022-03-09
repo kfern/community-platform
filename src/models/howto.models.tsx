@@ -1,7 +1,7 @@
 import { ISelectedTags } from './tags.model'
 import { DBDoc, IModerable } from './common.models'
-import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
-import { IUploadedFileMeta } from 'src/stores/storage'
+import type { IConvertedFileMeta } from '../components/ImageInput/ImageInput'
+import type { IUploadedFileMeta } from '../stores/storage'
 
 /**
  * Comments are currently only used in Howtos.
@@ -33,9 +33,6 @@ export interface IHowto extends IHowtoFormInput, IModerable {
  */
 export type IHowtoDB = IHowto & DBDoc
 
-export type IHowtoStats = {
-  votedUsefulCount: number
-}
 
 export interface IHowtoStep extends IHowToStepFormInput {
   // *** NOTE - adding an '_animationKey' field to track when specific array element removed for

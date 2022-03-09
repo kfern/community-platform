@@ -4,10 +4,10 @@ import isUrl from 'is-url'
 import { ISelectedTags } from 'src/models/tags.model'
 import { IDBEndpoint, ILocation } from 'src/models/common.models'
 import { includesAll } from 'src/utils/filters'
-import { RootStore } from '..'
+import { RootStore } from '../index'
 import { IConvertedFileMeta } from 'src/components/ImageInput/ImageInput'
 import { IUploadedFileMeta, Storage } from '../storage'
-import { useCommonStores } from 'src'
+import { useCommonStores } from 'src/index'
 import { logger } from 'src/logger'
 
 /**
@@ -62,6 +62,9 @@ export class ModuleStore {
 
   get mapsStore() {
     return this.rootStore.stores.mapsStore
+  }
+  get aggregationsStore() {
+    return this.rootStore.stores.aggregationsStore
   }
 
   /****************************************************************************
